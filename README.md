@@ -1,4 +1,6 @@
-# TextAppExchangeRates
+# AngularExchangeRates
+
+use User Name - test, password - 12345 to login
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.6.
 

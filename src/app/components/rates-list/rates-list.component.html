@@ -1,0 +1,92 @@
+<div class="rates-list-container">
+  <ng-container *ngIf="configurable">
+    <mat-form-field appearance="outline">
+      <mat-label>Fetch Interval</mat-label>
+      <mat-select [value]="intervalValue$ | async"
+        (valueChange)="intervalValue$.next($event)">
+        <mat-option [value]="5000">5 sec</mat-option>
+        <mat-option [value]="10000">10 sec</mat-option>
+        <mat-option [value]="15000">15 sec</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Show Icon Duration</mat-label>
+      <mat-select [value]="showIconsDuration" (valueChange)="showIconsDuration = $event">
+        <mat-option [value]="1000">1 sec</mat-option>
+        <mat-option [value]="2000">2 sec</mat-option>
+        <mat-option [value]="3000">3 sec</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-raised-button (click)="handleClearData()">Clear Data</button>
+
+    <button mat-raised-button [routerLink]="['/chart']">Go To Chart</button>
+
+    <button mat-raised-button [routerLink]="['/grid']">Go To Grid</button>
+
+    <button mat-raised-button (click)="handleLogOut()">Log Out</button>
+  </ng-container>
+
+  <ng-container *ngIf="filterable">
+    <mat-form-field appearance="fill">
+      <mat-label>Crypto Name</mat-label>
+      <input matInput [(ngModel)]="filterName">
+    </mat-form-field>
+  </ng-container>
+
+  <table *ngIf="gridRates[0]" mat-table [dataSource]="getFilteredData()" class="mat-elevation-z8">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let item">{{ item.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="currentRate">
+      <th mat-header-cell *matHeaderCellDef>Rate</th>
+      <td mat-cell *matCellDef="let item">
+        {{ item.currentRate }}
+        <span *ngIf="isIconsShown" class="diff"
+          [ngClass]="{ up: item.diff > 0, down: item.diff < 0, eq: item.diff === 0 }">
+          {{ item.diff === 0 ? '<>' : item.diff > 0 ? '↑' : '↓' }}
+        </span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="maxRate">
+      <th mat-header-cell *matHeaderCellDef>Max Rate</th>
+      <td mat-cell *matCellDef="let item">{{ item.maxRate }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="minRate">
+      <th mat-header-cell *matHeaderCellDef>Min Rate</th>
+      <td mat-cell *matCellDef="let item">{{ item.minRate }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="average1Min">
+      <th mat-header-cell *matHeaderCellDef>Average 1 Min</th>
+      <td mat-cell *matCellDef="let item">{{ item.average1Min }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="average2Min">
+      <th mat-header-cell *matHeaderCellDef>Average 2 Min</th>
+      <td mat-cell *matCellDef="let item">{{ item.average2Min }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="average3Min">
+      <th mat-header-cell *matHeaderCellDef>Average 3 Min</th>
+      <td mat-cell *matCellDef="let item">{{ item.average3Min }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="average5Min">
+      <th mat-header-cell *matHeaderCellDef>Average 5 Min</th>
+      <td mat-cell *matCellDef="let item">{{ item.average5Min }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="8">No data</td>
+    </tr>
+  </table>
+</div>

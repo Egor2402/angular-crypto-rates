@@ -1,10 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { RatesService } from './services/rates.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
-  title = 'text-app-exchange-rates';
+export class AppComponent implements OnInit, OnDestroy {
+  constructor(private ratesService: RatesService) {}
+
+  ngOnInit(): void {
+    this.ratesService.startIntervalFetching();
+  }
+
+  ngOnDestroy(): void {
+    this.ratesService.stopIntervalFetching(); 
+  }
 }
